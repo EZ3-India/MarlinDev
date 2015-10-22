@@ -100,6 +100,8 @@
   #include "mesh_bed_leveling.h"
 #endif
 
+uint32_t tnp=0;
+
 void _EEPROM_writeData(int &pos, uint8_t* value, uint8_t size) {
   uint8_t c;
   while (size--) {
@@ -129,7 +131,7 @@ void _EEPROM_readData(int &pos, uint8_t* value, uint8_t size) {
 
 #define DUMMY_PID_VALUE 3000.0f
 
-#define EEPROM_OFFSET 100
+#define EEPROM_OFFSET 150
 
 #if ENABLED(EEPROM_SETTINGS)
 
@@ -463,8 +465,8 @@ void Config_RetrieveSettings() {
     // Report settings retrieved and length
     SERIAL_ECHO_START;
     SERIAL_ECHO(ver);
-    SERIAL_ECHOPAIR(" stored settings retrieved (", (unsigned long)i);
-    SERIAL_ECHOLNPGM(" bytes)");
+    SERIAL_ECHOPAIR(" stored settings retrieved ", (unsigned long)i);
+    SERIAL_ECHOLNPGM(" bytes");
   }
 
   #if ENABLED(EEPROM_CHITCHAT)
@@ -893,3 +895,56 @@ void Config_PrintSettings(bool forReplay) {
 }
 
 #endif // !DISABLE_M503
+
+/**
+ * Retrieve the total number of prints- M504
+ */
+ void showtotalprints() {
+  int i=100;
+  EEPROM_READ_VAR(i,tnp);
+  SERIAL_ECHO_START;
+  SERIAL_ECHOPGM("Total of Prints: ");
+  SERIAL_ECHOLN(tnp);
+  }
+
+/**
+ * Increase the print counter by 1- M505
+ */  
+void totalprints() {
+  int i=100;
+  tnp=increasetnp();
+  EEPROM_WRITE_VAR(i,tnp);
+  SERIAL_ECHO_START;
+  SERIAL_ECHOPGM("Total of Prints: ");
+  SERIAL_ECHOLN(tnp);
+}
+
+int increasetnp() {
+  int i=100;
+  int itnp;
+  EEPROM_READ_VAR(i,itnp);
+  itnp=itnp+1;
+  return itnp;
+}
+
+/**
+ * Reset the print counter - M506
+ */
+void resettnp() {
+  int zero=0;
+  int i=100;
+  EEPROM_WRITE_VAR(i,zero);
+  SERIAL_ECHOLNPGM("The print counter has been resetted");
+  //SERIAL_ECHOPGM("Total of Prints: ");
+  //SERIAL_ECHOLN(tnp);
+}
+
+/**
+ * Print counter LCD implementation
+ */
+int return_tnp() {
+  int i=100;
+  int Rtnp;
+  EEPROM_READ_VAR(i,Rtnp);
+  return Rtnp;
+}

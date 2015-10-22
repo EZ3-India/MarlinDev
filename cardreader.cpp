@@ -4,6 +4,7 @@
 #include "stepper.h"
 #include "temperature.h"
 #include "language.h"
+#include "configuration_store.h"
 
 #if ENABLED(SDSUPPORT)
 
@@ -594,6 +595,7 @@ void CardReader::printingHasFinished() {
     if (SD_FINISHED_STEPPERRELEASE) {
       //finishAndDisableSteppers();
       enqueuecommands_P(PSTR(SD_FINISHED_RELEASECOMMAND));
+      totalprints();
     }
     autotempShutdown();
   }

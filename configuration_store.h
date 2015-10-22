@@ -4,6 +4,11 @@
 #include "MarlinFirmware.h"
 
 void Config_ResetDefault();
+void showtotalprints();
+void totalprints();
+int increasetnp();
+void resettnp();
+int return_tnp();
 
 #if DISABLED(DISABLE_M503)
   void Config_PrintSettings(bool forReplay=false);
