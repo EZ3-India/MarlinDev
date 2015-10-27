@@ -14,7 +14,7 @@
  *
  */
 
-#define EEPROM_VERSION "V21"
+#define EEPROM_VERSION "V22"
 
 /**
  * V19 EEPROM Layout:
@@ -100,7 +100,6 @@
   #include "mesh_bed_leveling.h"
 #endif
 
-uint32_t tnp=0;
 
 void _EEPROM_writeData(int &pos, uint8_t* value, uint8_t size) {
   uint8_t c;
@@ -465,8 +464,8 @@ void Config_RetrieveSettings() {
     // Report settings retrieved and length
     SERIAL_ECHO_START;
     SERIAL_ECHO(ver);
-    SERIAL_ECHOPAIR(" stored settings retrieved ", (unsigned long)i);
-    SERIAL_ECHOLNPGM(" bytes");
+    SERIAL_ECHOPAIR(" stored settings retrieved (", (unsigned long)i);
+    SERIAL_ECHOLNPGM(" bytes)");
   }
 
   #if ENABLED(EEPROM_CHITCHAT)
@@ -896,11 +895,16 @@ void Config_PrintSettings(bool forReplay) {
 
 #endif // !DISABLE_M503
 
+#if ENABLED(PRINT_COUNTER)
+
+uint32_t tnp=0;
+#define count_offset 100
+
 /**
- * Retrieve the total number of prints- M504
+ * Gets the current Print Count- M505
  */
- void showtotalprints() {
-  int i=100;
+void showtotalprints() {
+  int i = count_offset;
   EEPROM_READ_VAR(i,tnp);
   SERIAL_ECHO_START;
   SERIAL_ECHOPGM("Total of Prints: ");
@@ -908,10 +912,10 @@ void Config_PrintSettings(bool forReplay) {
   }
 
 /**
- * Increase the print counter by 1- M505
+ * Increase the print counter by 1 (Indicates another Print has Finished) - M505 F
  */  
 void totalprints() {
-  int i=100;
+  int i = count_offset;
   tnp=increasetnp();
   EEPROM_WRITE_VAR(i,tnp);
   SERIAL_ECHO_START;
@@ -920,7 +924,7 @@ void totalprints() {
 }
 
 int increasetnp() {
-  int i=100;
+  int i = count_offset;
   int itnp;
   EEPROM_READ_VAR(i,itnp);
   itnp=itnp+1;
@@ -928,11 +932,11 @@ int increasetnp() {
 }
 
 /**
- * Reset the print counter - M506
+ * Clears the Print Count - M505 C
  */
 void resettnp() {
+  int i = count_offset;
   int zero=0;
-  int i=100;
   EEPROM_WRITE_VAR(i,zero);
   SERIAL_ECHOLNPGM("The print counter has been resetted");
   //SERIAL_ECHOPGM("Total of Prints: ");
@@ -943,8 +947,10 @@ void resettnp() {
  * Print counter LCD implementation
  */
 int return_tnp() {
-  int i=100;
+  int i = count_offset;
   int Rtnp;
   EEPROM_READ_VAR(i,Rtnp);
   return Rtnp;
 }
+
+#endif // PRINT_COUNTER

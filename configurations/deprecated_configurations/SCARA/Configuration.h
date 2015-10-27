@@ -639,6 +639,13 @@ const bool Z_MIN_PROBE_ENDSTOP_INVERTING = false; // set to true to invert the l
   #define EEPROM_CHITCHAT // Please keep turned on if you can.
 #endif
 
+// Print Counter 
+// Store the number of prints in the EEPROM
+// M505 G - Gets the current Print Count
+// M505 F - Increase the print counter by 1 (Indicates another Print has Finished)
+// M505 C - Clears the Print Count
+#define PRINT_COUNTER
+
 //
 // M100 Free Memory Watcher
 //

@@ -55,7 +55,10 @@ static void lcd_status_screen();
   static void lcd_control_temperature_preheat_abs_settings_menu();
   static void lcd_control_motion_menu();
   static void lcd_control_volumetric_menu();
+  
+  #if ENABLED(PRINT_COUNTER)
   static void print_counter_menu();
+  #endif
 
   #if ENABLED(HAS_LCD_CONTRAST)
     static void lcd_set_contrast();
@@ -937,8 +940,10 @@ static void lcd_control_menu() {
   MENU_ITEM(submenu, MSG_TEMPERATURE, lcd_control_temperature_menu);
   MENU_ITEM(submenu, MSG_MOTION, lcd_control_motion_menu);
   MENU_ITEM(submenu, MSG_VOLUMETRIC, lcd_control_volumetric_menu);
-  MENU_ITEM(submenu, MSG_PRINT_COUNTER, print_counter_menu);
   
+  #if ENABLED(PRINT_COUNTER)
+    MENU_ITEM(submenu, MSG_PRINT_COUNTER, print_counter_menu);
+  #endif
   #if ENABLED(HAS_LCD_CONTRAST)
     //MENU_ITEM_EDIT(int3, MSG_CONTRAST, &lcd_contrast, 0, 63);
     MENU_ITEM(submenu, MSG_CONTRAST, lcd_set_contrast);
@@ -1221,13 +1226,15 @@ static void lcd_control_volumetric_menu() {
  * "Control" > "Print Counter" submenu
  *
  */
-static void print_counter_menu() {
-  int rttnp = return_tnp();
-  lcd_implementation_drawedit(PSTR(MSG_PRINTS), itostr3(rttnp));
-  START_MENU();
-  MENU_ITEM(back, MSG_CONTROL, lcd_control_menu);
-  END_MENU();
-}
+#if ENABLED(PRINT_COUNTER)
+    static void print_counter_menu() {
+    int rttnp = return_tnp();
+    lcd_implementation_drawedit(PSTR(MSG_PRINTS), itostr3(rttnp));
+    START_MENU();
+    MENU_ITEM(back, MSG_CONTROL, lcd_control_menu);
+    END_MENU();
+  }
+#endif
 
 /**
  *
