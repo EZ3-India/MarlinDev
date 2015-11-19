@@ -2,7 +2,7 @@
 #define MARLINFIRMWARE_H
 
 #define AS_QUOTED_STRING(S)           #S
-#define INCLUDE_BY_CLASS_AND_ID(C,I)  AS_QUOTED_STRING(configurations/C/I/Customization.h)
+#define INCLUDE_BY_CLASS_AND_ID(C,I)  AS_QUOTED_STRING(configurations/vendor/generic/RepRap/Customization.h)
 #define INCLUDE_BY_PATH(P)            AS_QUOTED_STRING(P)
 
 #include "FirmwareCustomization.h"
