@@ -193,7 +193,8 @@
  * M501 - Read parameters from EEPROM (if you need reset them after you changed them temporarily).
  * M502 - Revert to the default "factory settings". You still need to store them in EEPROM afterwards if you want to.
  * M503 - Print the current settings (from memory not from EEPROM). Use S0 to leave off headings.
- * M505 - G<Gets the current Print Count>, F<Increase the print counter by 1 (Indicates another Print has Finished)>, C<Clears the Print Count>
+ * M504 - Generic functions, Start & End of gcode. S<started> or E<ended>
+ * M505 - S<Retreive Total Print stats>,C<Clear all counters>
  * M540 - Use S[0|1] to enable or disable the stop SD card print on endstop hit (requires ABORT_ON_ENDSTOP_HIT_FEATURE_ENABLED)
  * M600 - Pause for filament change X[pos] Y[pos] Z[relative lift] E[initial retract] L[later retract distance for removal]
  * M665 - Set delta configurations: L<diagonal rod> R<delta radius> S<segments/s>
@@ -5262,7 +5263,7 @@ inline void gcode_M504() {
  * M505: Printer Counter
  */
 inline void gcode_M505() {
-  if (code_seen('G')) showtotalprints(); // Gets the current Print Count- M505 G
+  if (code_seen('S')) showtotalprints(); // Gets the current Print Count- M505 G
   if (code_seen('C')) resettnp(); // Clears the Print Count - M505 C
 }
 #endif
