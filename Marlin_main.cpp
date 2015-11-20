@@ -5262,7 +5262,7 @@ inline void gcode_M504() {
  * M505: Printer Counter
  */
 inline void gcode_M505() {
-  if (code_seen('G')) showtotalprints(); // Gets the current Print Count- M505 G
+  if (code_seen('S')) showtotalprints(); // Gets the current Print Count- M505 G
   if (code_seen('C')) resettnp(); // Clears the Print Count - M505 C
 }
 #endif
